@@ -29,8 +29,7 @@ mat sequential::forward(mat x, mat t) {
 mat sequential::backward() {
   mat h = loss->backward();
 
-  for (int i = layers.size() - 1; i >= 0; i--)
-    h = layers[i]->backward(h);
+  for (int i = layers.size() - 1; i >= 0; i--) h = layers[i]->backward(h);
 
   return h;
 }
@@ -41,22 +40,20 @@ void sequential::update_param(float lr) {
   }
 }
 
-void sequential::fit(mat x, mat y, int epochs, float lr, int batch_size) {
+void sequential::fit(vector<mat> x, vector<mat> y, int epochs, float lr, int batch_size) {
   for (int e = 0; e < epochs; e++) {
     mat sum_loss = 0;
     int b_i = 0;
 
-    for (int j = 0; j < x.shape()[0]; j++) {
-
+    for (int j = 0; j < x.size(); j++) {
       // int i = rand() % 4;
       int i = j;
 
-      mat X = transpose( atleast_2d(xt::row(x, i)) );
+      // mat X = row(x, i);
+      // mat Y = row(atleast_2d(y), i);
 
-      assert( adapt(X.shape()) == mat({2,1}) );
-
-      // mat Y = transpose(atleast_2d( xt::row(y, i) ));
-      mat Y = row( transpose(atleast_2d(y)), i);
+      mat X = x.at(j);
+      mat Y = y.at(j);
 
       mat loss = forward(X, Y);
       sum_loss += loss;
@@ -66,17 +63,23 @@ void sequential::fit(mat x, mat y, int epochs, float lr, int batch_size) {
       update_param(lr);
 
       if (e % ((int)(1 + epochs * (1.0 / 5))) == 0)
-          cout << "loss:" << loss << "\n";
+        cout << "loss:" << loss << "\n";
     }
 
     if (e % ((int)(1 + epochs * (1.0 / 5))) == 0)
-      cout << "Epoch " << e << "/" << epochs << "\n"
+      cout << "Epoch " << e << "/" << epochs
+           << "\n"
            // << "average loss: " << (sum_loss / float(b_i)) << "\n"
            << "sum_loss: " << sum_loss << "\n\n";
   }
 }
 
 mat sequential::predict(mat x) {
-  // Should do this batchwise if dataset is too big
-  return argmax(forward(x), 1);
+  // Index of max output neuron
+  // Can't be used if output_size is 1
+  // return argmax(forward(x));
+
+  mat y = forward(x);
+
+  return ones_like(y) * (y > 0.5);
 }

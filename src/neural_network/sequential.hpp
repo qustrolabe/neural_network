@@ -19,6 +19,6 @@ class sequential : public base_layer {
   mat forward(mat x, mat t);
   mat backward();
   void update_param(float lr);
-  void fit(mat x, mat y, int epochs = 10, float lr = 0.2, int batch_size = 4);
+  void fit(vector<mat> x, vector<mat> y, int epochs = 10, float lr = 0.2, int batch_size = 4);
   mat predict(mat x);
 };
