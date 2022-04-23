@@ -5,9 +5,9 @@ using std::cout;
 
 namespace layer {
 
-sigmoid::sigmoid(string _name) { name = _name; }
+mat sig_func(mat x) { return mat(1 / (1 + exp(-x))); }
 
-mat sig_func(const mat &x) { return mat(1 / (1 + exp(-x))); }
+sigmoid::sigmoid(string _name) { name = _name; }
 
 mat sigmoid::forward(mat x) {
   y = sig_func(x);
