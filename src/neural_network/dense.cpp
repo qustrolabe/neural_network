@@ -3,9 +3,11 @@ using std::cout;
 
 #include <sstream>
 
-#include "full_layer.hpp"
+#include "dense.hpp"
 
-full_layer::full_layer(int in_size, int out_size, string layer_name) {
+namespace layer {
+
+dense::dense(int in_size, int out_size, string layer_name) {
   input_size = in_size;
   output_size = out_size;
 
@@ -25,7 +27,7 @@ full_layer::full_layer(int in_size, int out_size, string layer_name) {
   bias_grad = zeros<float>({output_size});
 }
 
-void full_layer::show() {
+void dense::show() {
   cout << "[LAYER_INFO] name: " << name << "\n"
 
        << "Weight:\n"
@@ -45,7 +47,7 @@ void full_layer::show() {
        << "";
 }
 
-mat full_layer::forward(mat x) {
+mat dense::forward(mat x) {
   x_store = x;
 
   mat y = linalg::dot(x, weight) + bias;
@@ -56,7 +58,7 @@ mat full_layer::forward(mat x) {
   return y;
 }
 
-mat full_layer::backward(mat y_grad) {
+mat dense::backward(mat y_grad) {
   assert(adapt(y_grad.shape()) == xarray<int>({output_size}));
 
   weight_grad = linalg::dot(transpose(atleast_2d(x_store)), atleast_2d(y_grad));
@@ -70,56 +72,9 @@ mat full_layer::backward(mat y_grad) {
   return x_grad;
 }
 
-void full_layer::update_param(float lr) {
+void dense::update_param(float lr) {
   weight = (weight - lr * weight_grad);
   bias = (bias - lr * bias_grad);
 }
 
-// full_layer::full_layer(int in_size, int out_size, string layer_name) {
-//   input_size = in_size;
-//   output_size = out_size;
-
-//   name = layer_name;
-
-//   weight = random::randn<float>({output_size, input_size});
-//   bias = zeros<float>({output_size, 1});
-
-//   weight_grad = zeros<float>({output_size, input_size});
-//   bias_grad = zeros<float>({output_size, 1});
-// }
-
-// mat full_layer::forward(mat x) {
-//   assert(adapt(x.shape()) == xarray<int>({input_size, 1}));
-
-//   x_store = x;
-
-//   mat y = linalg::dot(weight, x) + bias;
-
-//   assert(adapt(y.shape()) == xarray<int>({output_size, 1}));
-
-//   return y;
-// }
-
-// mat full_layer::backward(mat y_grad) {
-//   assert(adapt(y_grad.shape()) == xarray<int>({output_size, 1}));
-
-//   mat x_grad = linalg::dot(transpose(weight), y_grad);
-
-//   assert(adapt(x_grad.shape()) == xarray<int>({input_size, 1}));
-
-//   weight_grad = linalg::dot(y_grad, transpose(x_store));
-
-//   assert(adapt(weight_grad.shape()) == xarray<int>({output_size,
-//   input_size}));
-
-//   bias_grad = y_grad;
-
-//   assert(adapt(bias_grad.shape()) == xarray<int>({output_size, 1}));
-
-//   return x_grad;
-// }
-
-// void full_layer::update_param(float lr) {
-//   weight = (weight - lr * weight_grad);
-//   bias = (bias - lr * bias_grad);
-// }
+}  // namespace layer

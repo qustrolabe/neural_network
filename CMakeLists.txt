@@ -12,13 +12,15 @@ include_directories(${XTENSOR_BLAS_INCLUDE_DIRS})
 include_directories(src)
 
 add_executable(neural_network src/main.cpp
-	src/neural_network/full_layer.cpp
+
+	src/neural_network/dense.cpp
 	src/neural_network/sequential.cpp
 
-	src/neural_network/relu_layer.cpp
-	src/neural_network/sigmoid_layer.cpp
+	src/neural_network/relu.cpp
+	src/neural_network/sigmoid.cpp
 
 	src/neural_network/softmax_loss.cpp
+	src/neural_network/simple_loss.cpp
 
 	# src/neural_network/
 	# src/neural_network/

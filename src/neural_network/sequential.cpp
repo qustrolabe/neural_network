@@ -5,7 +5,9 @@
 using std::cout;
 using std::endl;
 
-sequential::sequential(vector<base_layer*> _layers, base_layer* _loss) {
+namespace layer {
+
+sequential::sequential(vector<base*> _layers, base* _loss) {
   layers = _layers;
   loss = _loss;
 }
@@ -40,7 +42,8 @@ void sequential::update_param(float lr) {
   }
 }
 
-void sequential::fit(vector<mat> x, vector<mat> y, int epochs, float lr, int batch_size) {
+void sequential::fit(vector<mat> x, vector<mat> y, int epochs, float lr,
+                     int batch_size) {
   for (int e = 0; e < epochs; e++) {
     mat sum_loss = 0;
     int b_i = 0;
@@ -83,3 +86,5 @@ mat sequential::predict(mat x) {
 
   return ones_like(y) * (y > 0.5);
 }
+
+}  // namespace layer

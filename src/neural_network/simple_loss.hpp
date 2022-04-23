@@ -7,15 +7,14 @@
 
 namespace layer {
 
-class softmax_loss : public base {
+class simple_loss : public base {
  public:
-  softmax_loss(string _name = "Softmax");
+  simple_loss(string _name = "Simple");
 
   mat x_store;
   mat t_store;
 
-  mat forward(mat x, mat t);
-  mat forward_softmax(mat x);
+  mat forward(const mat x, const mat t);
   mat backward();
 };
 

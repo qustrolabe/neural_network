@@ -1,10 +1,12 @@
 #pragma once
 
-#include "base_layer.hpp"
+#include "base.hpp"
 
-class full_layer : public base_layer {
+namespace layer {
+
+class dense : public base {
  public:
-  full_layer(int in_size, int out_size, string layer_name = "full");
+  dense(int in_size, int out_size, string layer_name = "full");
 
   int input_size;
   int output_size;
@@ -23,3 +25,5 @@ class full_layer : public base_layer {
   mat backward(mat y_grad);
   void update_param(float lr);
 };
+
+}  // namespace layer

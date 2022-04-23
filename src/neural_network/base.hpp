@@ -5,9 +5,11 @@ using std::string;
 
 #include "mat.hpp"
 
-class base_layer {
+namespace layer {
+
+class base {
  public:
-  base_layer() {}
+  base() {}
 
   string name = "";
 
@@ -17,3 +19,5 @@ class base_layer {
   virtual mat backward() { return 0; }
   virtual void update_param(float lr) {}
 };
+
+}  // namespace layer

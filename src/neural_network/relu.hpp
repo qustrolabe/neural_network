@@ -1,14 +1,18 @@
 #pragma once
 
-#include "base_layer.hpp"
+#include "base.hpp"
 #include "mat.hpp"
 
-class relu_layer : public base_layer {
+namespace layer {
+
+class relu : public base {
  public:
-  relu_layer(string _name = "Relu");
+  relu(string _name = "Relu");
 
   mat y;
 
   mat forward(mat x);
   mat backward(mat y_grad);
 };
+
+}
